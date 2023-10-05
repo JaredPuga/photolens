@@ -28,6 +28,13 @@ const database = () => {
     });
   };
 
+  // To update a photo by ID
+  const updatePhoto = (photoId, updatedPhoto) => {
+    return knex(photosTable)
+      .where({ id: photoId })
+      .update(updatedPhoto);
+  };
+
   // To delete a photo by ID
   const deletePhoto = (photoId) => {
     return knex(photosTable)
@@ -35,7 +42,7 @@ const database = () => {
       .del();
   };
 
-  return { createPhoto, getPhotos, deletePhoto };
+  return { createPhoto, getPhotos, updatePhoto, deletePhoto };
 };
 
 module.exports = {

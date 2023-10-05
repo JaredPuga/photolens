@@ -22,6 +22,20 @@ module.exports = function (app, database) {
       });
   });
 
+  // Update Method (PUT or PATCH)
+  app.put('/photos/:photoId', (req, res) => {
+    const photoId = req.params.photoId;
+    const updatedPhoto = req.body;
+
+    database.updatePhoto(photoId, updatedPhoto)
+      .then(() => {
+        res.json({ "Message": "Photo updated" });
+        console.log("Photo with ID", photoId, "was updated");
+      }).catch(e => {
+        res.status(500).send(e);
+      });
+  });
+
   // Delete Method
   app.delete('/photos/:photoId', (req, res) => {
     const photoId = req.params.photoId;
