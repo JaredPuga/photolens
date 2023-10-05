@@ -1,10 +1,26 @@
 module.exports = function (app, database) {
-  // Get Method
+  // Get Method for all photos
   app.get('/photos', (req, res) => {
     database.getPhotos()
       .then(photos => {
         console.log(photos);
         res.json(photos);
+      })
+      .catch(e => res.status(500).send(e));
+  });
+
+  // Get Method for a Single Photo by ID
+  app.get('/photos/:photoId', (req, res) => {
+    const photoId = req.params.photoId;
+
+    database.getPhotoById(photoId)
+      .then(photo => {
+        if (photo) {
+          console.log(photo);
+          res.json(photo);
+        } else {
+          res.status(404).json({ "Message": "Photo not found" });
+        }
       })
       .catch(e => res.status(500).send(e));
   });

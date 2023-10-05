@@ -18,6 +18,13 @@ const database = () => {
     return knex(photosTable).select();
   };
 
+  // To get a single photo by ID
+  const getPhotoById = (photoId) => {
+    return knex(photosTable)
+      .where({ id: photoId })
+      .first(); // Devuelve la primera fila encontrada
+  };
+
   // To create a new photo
   const createPhoto = ({ photo, title, description, date }) => {
     return knex(photosTable).insert({
@@ -42,7 +49,7 @@ const database = () => {
       .del();
   };
 
-  return { createPhoto, getPhotos, updatePhoto, deletePhoto };
+  return { getPhotos, getPhotoById, createPhoto, updatePhoto, deletePhoto };
 };
 
 module.exports = {
