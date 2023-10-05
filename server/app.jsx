@@ -2,14 +2,14 @@ require('dotenv').config()
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const { databaseService } = require('./services/databaseService');
+const { database } = require('./services/database');
 
 const app = express();
 
 app.use(bodyParser.json());
 
-const dbService = databaseService();
-require('./routes')(app, dbService);
+const dbService = database();
+require('./routes/routes')(app, dbService);
 
 app.listen(3000, function () {
   console.log('App listening on port 3000!');
