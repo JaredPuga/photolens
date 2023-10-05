@@ -1,105 +1,68 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-function PhotoForm() {
-  const [photoData, setPhotoData] = useState({
-    title: '',
-    description: '',
-    date: '',
-    file: null, // To save the photo file
-  });
+const port = 8000;
+const URI = `http://localhost:${port}/photos`;
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPhotoData({
-      ...photoData,
-      [name]: value,
-    });
-  };
+const ShowPhotos = () => {
+  const [photos, setPhotos] = useState([]);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setPhotoData({
-      ...photoData,
-      file: file,
-    });
-  };
+  useEffect(() => {
+    getPhotos();
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', photoData.title);
-    formData.append('description', photoData.description);
-    formData.append('date', photoData.date);
-    formData.append('photo', photoData.file);
-
+  // To show all photos
+  const getPhotos = async () => {
     try {
-      const response = await fetch('/photos', {
-        method: 'POST',
-        body: formData,
-      });
-      if (response.ok) {
-        console.log('Foto subida exitosamente');
-      } else {
-        console.error('Error al subir la foto');
-      }
+      const res = await axios.get(URI);
+      setPhotos(res.data);
     } catch (error) {
-      console.error('Error de red:', error);
+      console.error("Error fetching photos: ", error);
+    }
+  };
+
+  // To delete a photo
+  const deletePhoto = async (id) => {
+    try {
+      const res = await axios.delete(`${URI}/${id}`);
+      getPhotos();
+    } catch (error) {
+      console.error("Error deleting photo: ", error);
     }
   };
 
   return (
     <div>
-      <h2>Subir una nueva foto</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Título:</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={photoData.title}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="description">Descripción:</label>
-          <textarea
-            id="description"
-            name="description"
-            value={photoData.description}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="date">Fecha:</label>
-          <input
-            type="date"
-            id="date"
-            name="date"
-            value={photoData.date}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="photo">Foto:</label>
-          <input
-            type="file"
-            id="photo"
-            name="photo"
-            onChange={handleFileChange}
-            accept="image/*"
-          //required
-          />
-        </div>
-        <div>
-          <button type="submit">Subir Foto</button>
-        </div>
-      </form>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Photo</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {photos.map((photo) => (
+            <tr key={photo.id}>
+              <td>{photo.id}</td>
+              <td>{photo.photo.url}</td>
+
+              <td>{photo.title}</td>
+              <td>{photo.description}</td>
+              <td>{photo.date}</td>
+              <td>
+                <button onClick={() => deletePhoto(photo.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
 
-export default PhotoForm;
+export default ShowPhotos;
