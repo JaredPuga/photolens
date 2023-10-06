@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const CreatePhoto = ({ onAddPhoto }) => {
-  // Local state for form data
   const [formData, setFormData] = useState({
     photo: '',
     title: '',
@@ -10,7 +9,6 @@ const CreatePhoto = ({ onAddPhoto }) => {
     date: '',
   });
 
-  // Handle changes in the form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,17 +17,13 @@ const CreatePhoto = ({ onAddPhoto }) => {
     });
   };
 
-  // Submit the form data to the server
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Send data to the server using axios.post
       const response = await axios.post('http://localhost:8000/photos', formData);
 
-      // If the submission is successful, should receive a response from the server.
       if (response.status === 201) {
-        // Perform necessary actions, like clearing the form.
         setFormData({
           photo: '',
           title: '',
@@ -39,8 +33,7 @@ const CreatePhoto = ({ onAddPhoto }) => {
 
         console.log('Photo created successfully:', response.data);
 
-        // Call the onAddPhoto function to update the list of photos in ShowPhotos
-        onAddPhoto(response.data); // Assumes that response.data contains the new photo
+        onAddPhoto(response.data);
       }
     } catch (error) {
       console.error('Error adding the photo: ', error);
@@ -51,46 +44,50 @@ const CreatePhoto = ({ onAddPhoto }) => {
     <div>
       <h2>Add New Photo</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="photo">Photo URL:</label>
+        <div className="mb-3">
+          <label htmlFor="photo" className="form-label">Photo URL:</label>
           <input
             type="text"
             id="photo"
             name="photo"
             value={formData.photo}
             onChange={handleChange}
+            className="form-control"
           />
         </div>
-        <div>
-          <label htmlFor="title">Title:</label>
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">Title:</label>
           <input
             type="text"
             id="title"
             name="title"
             value={formData.title}
             onChange={handleChange}
+            className="form-control"
           />
         </div>
-        <div>
-          <label htmlFor="description">Description:</label>
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">Description:</label>
           <textarea
             id="description"
             name="description"
             value={formData.description}
             onChange={handleChange}
+            className="form-control"
           ></textarea>
         </div>
-        <div>
-          <label htmlFor="date">Date:</label>
+        <div className="mb-3">
+          <label htmlFor="date" className="form-label">Date:</label>
           <input
             type="date"
             id="date"
             name="date"
             value={formData.date}
             onChange={handleChange}
+            className="form-control"
           />
         </div>
-        <button type="submit">Add Photo</button>
+        <button type="submit" className="btn btn-primary">Add Photo</button>
       </form>
     </div>
   );

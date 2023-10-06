@@ -33,7 +33,8 @@ const ShowPhotos = () => {
 
   return (
     <div>
-      <table>
+      <h2 className="mt-4 mb-4">Photo Gallery</h2>
+      <table className="table table-bordered table-striped">
         <thead>
           <tr>
             <th>ID</th>
@@ -49,13 +50,22 @@ const ShowPhotos = () => {
             <tr key={photo.id}>
               <td>{photo.id}</td>
               <td>
-                <img src={photo.photo} alt={`Photo ${photo.id}`} />
+                <img
+                  src={photo.photo}
+                  alt={`Photo ${photo.id}`}
+                  className="img-thumbnail"
+                />
               </td>
               <td>{photo.title}</td>
               <td>{photo.description}</td>
               <td>{photo.date}</td>
               <td>
-                <button onClick={() => deletePhoto(photo.id)}>Delete</button>
+                <button
+                  onClick={() => deletePhoto(photo.id)}
+                  className="btn btn-danger btn-sm"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
