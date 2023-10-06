@@ -22,7 +22,7 @@ const database = () => {
   const getPhotoById = (photoId) => {
     return knex(photosTable)
       .where({ id: photoId })
-      .first(); // Devuelve la primera fila encontrada
+      .first();
   };
 
   // To create a new photo
