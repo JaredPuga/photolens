@@ -3,17 +3,20 @@ import axios from 'axios';
 
 const CreatePhoto = ({ onAddPhoto }) => {
   const [formData, setFormData] = useState({
-    photo: '',
+    photo: null,
     title: '',
     description: '',
     date: '',
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+
+    // If it is a files field, we access the files using e.target.files[0]
+    const updatedValue = type === 'file' ? e.target.files[0] : value;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: updatedValue,
     });
   };
 
@@ -21,11 +24,17 @@ const CreatePhoto = ({ onAddPhoto }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:8000/photos', formData);
+      const formDataToSubmit = new FormData();
+      formDataToSubmit.append('photo', formData.photo);
+      formDataToSubmit.append('title', formData.title);
+      formDataToSubmit.append('description', formData.description);
+      formDataToSubmit.append('date', formData.date);
+
+      const response = await axios.post('http://localhost:8000/photos', formDataToSubmit);
 
       if (response.status === 201) {
         setFormData({
-          photo: '',
+          photo: null,
           title: '',
           description: '',
           date: '',
@@ -45,12 +54,11 @@ const CreatePhoto = ({ onAddPhoto }) => {
       <h2>Add New Photo</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label htmlFor="photo" className="form-label">Photo URL:</label>
+          <label htmlFor="photo" className="form-label">Photo:</label>
           <input
-            type="text"
+            type="file"
             id="photo"
             name="photo"
-            value={formData.photo}
             onChange={handleChange}
             className="form-control"
           />

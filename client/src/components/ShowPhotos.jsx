@@ -11,6 +11,9 @@ const ShowPhotos = () => {
     getPhotos();
   }, []);
 
+  // Base URL de tu servidor donde se almacenan las imágenes
+  const serverBaseUrl = `http://localhost:${port}`;
+
   // To show all photos
   const getPhotos = async () => {
     try {
@@ -51,7 +54,7 @@ const ShowPhotos = () => {
               <td>{photo.id}</td>
               <td>
                 <img
-                  src={photo.photo}
+                  src={`${serverBaseUrl}/uploads/${photo.photo}`} // Usa el nombre del archivo
                   alt={`Photo ${photo.id}`}
                   className="img-thumbnail"
                 />

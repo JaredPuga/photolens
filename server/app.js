@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { database } = require('./services/database');
 const cors = require('cors');
 const app = express();
+const port = 8000;
 
 app.use(bodyParser.json());
 
@@ -27,7 +28,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-const port = 8000;
+// Desplay listener function in terminal
 app.listen(port, function () {
   console.log(`App listening on port ${port}!`);
 });
