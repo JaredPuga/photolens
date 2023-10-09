@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { Photo } from './Photo';
 
 const port = 8000;
 const URI = `http://localhost:${port}/photos`;
@@ -9,7 +10,7 @@ const ShowPhotos = () => {
 
   useEffect(() => {
     getPhotos();
-  }, []);
+  }, [photos]);
 
   // Base URL de tu servidor donde se almacenan las imágenes
   const serverBaseUrl = `http://localhost:${port}`;
@@ -17,8 +18,8 @@ const ShowPhotos = () => {
   // To show all photos
   const getPhotos = async () => {
     try {
-      const res = await axios.get(URI);
-      setPhotos(res.data);
+      const { data } = await axios.get(URI);
+      setPhotos(data);
     } catch (error) {
       console.error("Error fetching photos: ", error);
     }
@@ -50,27 +51,7 @@ const ShowPhotos = () => {
         </thead>
         <tbody>
           {photos.map((photo) => (
-            <tr key={photo.id}>
-              <td>{photo.id}</td>
-              <td>
-                <img
-                  src={`${serverBaseUrl}/uploads/${photo.photo}`} // Usa el nombre del archivo
-                  alt={`Photo ${photo.id}`}
-                  className="img-thumbnail"
-                />
-              </td>
-              <td>{photo.title}</td>
-              <td>{photo.description}</td>
-              <td>{photo.date}</td>
-              <td>
-                <button
-                  onClick={() => deletePhoto(photo.id)}
-                  className="btn btn-danger btn-sm"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+            <Photo key={photo.id} photo={photo} deletePhoto={deletePhoto} serverBaseUrl={serverBaseUrl}/>
           ))}
         </tbody>
       </table>
